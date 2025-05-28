@@ -83,3 +83,15 @@ Used ChatGPT to:
 - Draft README sections
   
 Used outputs as scaffolding only, and reviewed/refactored every piece.
+
+## Future Improvements
+
+- Auth, rate limiting: Logged in users and rate limit to reduce spamming
+- Caching: Forcasts can be cached using Reddis
+- Responsiveness: UI can be polished
+- Docker/K8s: Not required but for full scale app
+- Scoring: Config file or admin UI to turn the scoring metrics
+- Location Autocomplete: To help within user input
+- Validator: For validating user inputs sent to the backend
+- Integration Testing: Jest + Supertest
+- E2E Testing: Using Playwrite
