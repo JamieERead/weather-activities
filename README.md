@@ -62,6 +62,11 @@ npm install
 npm start
 ```
 
+## Running Tests
+
+Backend run: `npm run test`
+Frontend run: `npm run test`
+
 ## Technical Decisions
 
 - GraphQL over REST: For clean frontend integration and future extensibility

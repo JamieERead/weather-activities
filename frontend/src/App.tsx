@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useLazyQuery } from "@apollo/client";
+import { RANK_ACTIVITIES } from "./graphql/queries";
+import SearchCityForm from "./components/SearchCityForm";
+import ActivityList from "./components/ActivityList";
 
 function App() {
+  const [getActivities, { data, loading, error }] =
+    useLazyQuery(RANK_ACTIVITIES);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Search city activities based on weather</h1>
+      <SearchCityForm
+        onSubmit={(city) => getActivities({ variables: { city } })}
+      />
+
+      {loading && <p className="status">Loading...</p>}
+      {error && <p className="status error">Error: {error.message}</p>}
+      {data?.rankActivities && <ActivityList data={data.rankActivities} />}
     </div>
   );
 }
