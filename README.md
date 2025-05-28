@@ -49,6 +49,12 @@ Open http://localhost:4000 to access the GraphQL playground.
 
 **Frontend**
 
+Create an env file in `frontend/.env` 
+
+```
+VITE_GRAPHQL_API_URL=http://localhost:4000
+```
+
 To start the frontend run:
 ```
 cd frontend
