@@ -1,41 +1,31 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import { WeatherByWeek, WeatherDay } from "../types";
 
 dotenv.config();
 
-type ActivityScore = {
-  activity: string;
-  score: number;
-};
-
-const GEOCODE_API = process.env.OPEN_METEO_GEOCODE_URL!;
 const FORECAST_API = process.env.OPEN_METEO_FORECAST_URL!;
 
-const ACTIVITIES = [
-  "Skiing",
-  "Surfing",
-  "Outdoor sightseeing",
-  "Indoor sightseeing",
-];
+// Get daily weather data for the next 7 days
+export const get7DayWeather = async (
+  lat: number,
+  lon: number
+): Promise<WeatherDay[]> => {
+  const res = await axios.get(FORECAST_API, {
+    params: {
+      latitude: lat,
+      longitude: lon,
+      daily:
+        "temperature_2m_min,temperature_2m_max,precipitation_sum,snowfall_sum",
+      timezone: "auto",
+    },
+  });
 
-// Converts a city name to its lat/lon
-const getCoordinates = async (
-  city: string
-): Promise<{ lat: number; lon: number }> => {
-  const res = await axios.get(GEOCODE_API, { params: { name: city } });
-  const location = res.data?.results?.[0];
+  const daily: WeatherByWeek = res.data.daily;
 
-  if (!location) {
-    throw new Error(`Could not find coordinates for city: ${city}`);
-  }
-
-  return { lat: location.latitude, lon: location.longitude };
-};
-
-export const getActivitiesByRank = async (
-  city: string
-): Promise<ActivityScore[]> => {
-  const { lat, lon } = await getCoordinates(city);
-  console.log(lat, lon);
-  return [];
+  return daily.time.map((_: any, i: number) => ({
+    temp: (daily.temperature_2m_min[i] + daily.temperature_2m_max[i]) / 2,
+    rain: daily.precipitation_sum[i],
+    snow: daily.snowfall_sum[i],
+  }));
 };
